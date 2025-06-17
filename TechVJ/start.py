@@ -5,7 +5,6 @@ import pyrogram
 from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated, UserAlreadyParticipant, InviteHashExpired, UsernameNotOccupied
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message 
-import speedtest
 from config import API_ID, API_HASH, ERROR_MESSAGE
 from database.db import db
 from TechVJ.strings import HELP_TXT
@@ -13,30 +12,6 @@ from TechVJ.strings import HELP_TXT
 class batch_temp(object):
     IS_BATCH = {}
 
-@app.on_message(filters.command("speedtest"))
-async def speedtest_command(client, message: Message):
-    try:
-        # Initialize Speedtest
-        st = speedtest.Speedtest()
-        st.get_best_server()  # Select the best server
-        
-        # Measure download and upload speeds (in Mbps)
-        download_speed = st.download() / 1_000_000
-        upload_speed = st.upload() / 1_000_000
-        ping = st.results.ping
-
-        # Format the response
-        response = (
-            f"🌐 **Internet Speed Test Results**:\n"
-            f"Download Speed: {download_speed:.2f} Mbps\n"
-            f"Upload Speed: {upload_speed:.2f} Mbps\n"
-            f"Ping: {ping:.2f} ms"
-        )
-
-        await message.reply_text(response)
-    except Exception as e:
-        await message.reply_text(f"Error running speed test: {str(e)}")
-        
 async def downstatus(client, statusfile, message, chat):
     while True:
         if os.path.exists(statusfile):
